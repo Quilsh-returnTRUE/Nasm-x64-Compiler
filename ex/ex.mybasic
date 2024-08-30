@@ -1,0 +1,3 @@
+# test
+print "testing" 0x0A
+exit 3
