@@ -7,7 +7,7 @@ lea rsi, [rel lit1]
 mov rdx, 8 
 syscall 
 mov rax, 60 
-mov rdi, 3 
+mov rdi, 0 
 syscall 
 section .data 
 lit1 db "testing", 0x0A

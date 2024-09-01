@@ -8,8 +8,9 @@
 class Token : public std::string {
 public:
     std::string type;
-
-    Token(const std::string& s = "", const std::string& t = "") : std::string(s), type(t) {}
+    
+    Token(const std::string& s, const std::string& t) 
+        : std::string(s), type(t) {}
 };
 
 void panic(std::string err) {
@@ -19,7 +20,7 @@ void panic(std::string err) {
 
 std::vector<Token> split(const std::string& s, char delimiter) {
     std::vector<Token> tokens;
-    Token token("");
+    Token token("", "");
     bool insideQuotes = false;
 
     for (char ch : s) {
