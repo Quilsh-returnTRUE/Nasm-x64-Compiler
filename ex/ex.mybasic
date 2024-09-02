@@ -1,3 +1,2 @@
-# test
-print "testing" 0x0A
+print "Hello World!" 0x0A
 exit 0

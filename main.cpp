@@ -33,7 +33,7 @@ std::vector<Token> split(const std::string& s, char delimiter) {
             if (!token.empty()) {
                 tokens.push_back(token);
                 token.clear();
-                token.type = "char";
+                token.type = "value";
             }
         } else {
             token += ch;
@@ -87,34 +87,33 @@ void build(std::string input_path, std::string output_path) {
             string_literal_count += 1;
 
             tokens.erase(tokens.begin());
-            std::string constructed_msg = "lit" + std::to_string(string_literal_count) + " db ";
+            std::string constructed_data = "lit_" + std::to_string(string_literal_count) + " db ";
 
-            int msg_size = 0;
+            int data_size = 0;
             for (int i = 0; i < tokens.size(); i++) {
                 Token token = tokens[i];
 
                 if (token.type == "string") {
-                    constructed_msg += "\"" + token + "\"";
-                    msg_size += token.size();
-                } else if (token.type == "char") {
-                    constructed_msg += token;
-                    msg_size += 1;
+                    constructed_data += "\"" + token + "\"";
+                    data_size += token.size();
+                } else if (token.type == "value") {
+                    constructed_data += token;
+                    data_size += 1;
                 } else {
                     panic("Incorrect data type (line " + std::to_string(line_number) + "): `" + token.type + "` can not be fed into print.");
                 }
 
                 if (i != tokens.size() - 1) {
-                    constructed_msg += ", ";
+                    constructed_data += ", ";
                 }
             }
             output_file << "mov rax, 1 \n" <<
                 "mov rdi, 1 \n" <<
-                "lea rsi, [rel lit" + std::to_string(string_literal_count) << "] \n" <<
-                "mov rdx, " << msg_size << " \n" <<
+                "lea rsi, [rel lit_" + std::to_string(string_literal_count) << "] \n" <<
+                "mov rdx, " << data_size << " \n" <<
                 "syscall \n";
-            data_section.push_back(constructed_msg);
-        }
-        else {
+            data_section.push_back(constructed_data);
+        } else {
             panic("Invalid syntax (line " + std::to_string(line_number) + "): `" + tokens[0] + "` is not a recognised command.");
         }
         line_number++;
