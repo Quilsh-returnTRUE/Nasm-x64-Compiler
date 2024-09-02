@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "----COMPILING COMPILER----" 
-g++ -std=c++20 main.cpp -o target/main
+g++ -std=c++20 compiler/main.cpp -o target/main
 
 echo "----RUNNING COMPILER----" 
 target/main "$@"

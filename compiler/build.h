@@ -1,55 +1,12 @@
-#include <iostream>
+#pragma once
+
 #include <string>
-#include <cstddef>
-#include <fstream>
-#include <cstdlib>
 #include <vector>
-
-class Token : public std::string {
-public:
-    std::string type;
-    
-    Token(const std::string& s, const std::string& t) 
-        : std::string(s), type(t) {}
-};
-
-void panic(std::string err) {
-    std::cerr << "\033[1;31m" << err << "\033[0m" << std::endl;
-    std::exit(EXIT_FAILURE);
-}
-
-std::vector<Token> split(const std::string& s, char delimiter) {
-    std::vector<Token> tokens;
-    Token token("", "");
-    bool insideQuotes = false;
-
-    for (char ch : s) {
-        if (ch == '"') {
-            insideQuotes = !insideQuotes;
-            if (insideQuotes) {
-                token.type = "string";
-            }
-        } else if (ch == delimiter && !insideQuotes) {
-            if (!token.empty()) {
-                tokens.push_back(token);
-                token.clear();
-                token.type = "value";
-            }
-        } else {
-            token += ch;
-        }
-    }
-
-    if (!token.empty()) {
-        tokens.push_back(token);
-    }
-
-    return tokens;
-}
-
+#include <fstream>
+#include "frontend.h"
+#include "token.h"
 
 void build(std::string input_path, std::string output_path) {
-    std::cout << "Compiling " << input_path << " to " << output_path << std::endl;
 
     std::ifstream input_file(input_path);
     if (!input_file) {
@@ -121,35 +78,4 @@ void build(std::string input_path, std::string output_path) {
 
     input_file.close();
     output_file.close();
-}
-
-void help() {
-    panic("You did something wrong.");
-}
-
-int main(int argc, char *argv[]) {
-    if (argc > 1) {
-        std::string arg = argv[1];
-
-        if (arg == "build") {
-            if (argc == 3) {
-                std::string input_path = argv[2];
-                std::size_t pos = input_path.rfind('.');
-
-                std::string output_path = input_path.substr(0, pos) + ".asm";
-
-                build(argv[2], output_path);
-            } else if (argc == 4) {
-                build(argv[2], argv[3]);
-            } else {
-                help();
-            }
-        } else {
-            help();
-        }
-    } else {
-        help();
-    }
-
-    return 0;
 }
