@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "----COMPILING COMPILER----" 
+echo "   ----COMPILING----" 
 g++ -std=c++20 compiler/main.cpp -o target/main
 
 echo "----RUNNING COMPILER----" 
@@ -13,5 +13,8 @@ echo "----LINKING CODE----"
 ld ex/ex.o -o ex/ex
 rm ex/ex.o
 
-echo "----RUNNING CODE----" 
+echo "----CREATING SWAP CHAIN----"
+echo "   ----RUNNING CODE----" 
+
 ex/ex "$@"
+rm ex/ex

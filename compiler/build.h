@@ -34,7 +34,42 @@ void build(std::string input_path, std::string output_path) {
                 output_file << data_item << std::endl;
             }
         } else if (tokens[0] == "#") {
-        } else if (tokens[0] == "_") {
+        } 
+        else if(tokens[0] == "+")
+        {
+            output_file <<
+            "mov rax, 1 \n" <<
+            "mov rdi, 1 \n" <<
+            "mov r9, 80 \n" <<
+            "add r9, 10 \n" <<
+            "mov [lit_1], r9 \n" <<
+            "lea rsi, [rel lit_1] \n" <<
+            "mov rdx, 2 \n" <<
+            "syscall\n" <<
+
+            // what is the first num
+            "mov rax, 1\n"<<
+            "mov rdi, 1\n" <<
+            "lea rsi,[rel text1]\n" <<
+            "mov rdx, 24\n" <<
+            "syscall\n" <<
+
+            //what is the second num
+            "mov rax, 1\n"<<
+            "mov rdi, 1\n" <<
+            "lea rsi,[rel text2]\n" <<
+            "mov rdx, 24\n" <<
+            "syscall\n";
+
+
+        data_section.push_back("text1 db \"What is the first number\" \n");
+        data_section.push_back("text2 db \"What is the second number\" \n");
+
+        data_section.push_back("result db '0', 0 \n");
+        
+
+        }
+        else if (tokens[0] == "_") {
             tokens.erase(tokens.begin());
             for (Token token : tokens) {
                 output_file << token << " ";
